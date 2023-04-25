@@ -105,6 +105,7 @@ The board is running Linux 18.04 and most of the files for this project can be f
 ![image](https://user-images.githubusercontent.com/73012787/234382853-33189782-f774-4f6c-bef3-0adf8ebabce9.png)
 2. Set up the USB_C (RNDIS).
   - In device manager find USB RNDIS. This may be in “other devices”
+
   ![image](https://user-images.githubusercontent.com/73012787/234383035-7946e652-65f2-403d-bcf9-5fd976a6498c.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383159-a117f064-85d2-4bc8-a9b8-0c5841c1cac6.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383179-3d6105c6-322b-4b89-933c-e54d512232ad.png)
@@ -120,5 +121,28 @@ The board is running Linux 18.04 and most of the files for this project can be f
 8.	Make sure the drone is on and ping the Drone: `ping 192.168.42.1` (if not pingable see **Section 1 - Drone** and **Section 2 - Wi-Fi Modem**).
 9.	Make sure the sensor is on and ping the Sensor: `ping 192.168.0.152` (if not pingable see **Section 3 - Sensor** and **Section 2 - Wi-Fi Modem**).
 10.	If successfully ping both, then run the following commands exactly as specified:
-  `cd code/gsdk3/products/olympe/linux/env
-  `source setenv (ignore the error, not finding the library) 
+    cd code/gsdk3/products/olympe/linux/env
+    source setenv (ignore the error, not finding the library)
+    cd
+    cd /usr/share/zoneinfo
+    sudo chmod +rwx UCT
+    cd
+    cd code/gsdk3/packages/olympe/src/olympe/doc/examples
+    source ~/.bashrc
+    export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1
+11. Run the following commands exactly as specified: `python3.7 StreamAndFindPerson.py`
+
+## Section 6 - Additional Debugging
+Sometimes if you do not close the UDP port that communicates with the sensor properly, you will get missing events error which can be solved with this code: 
+`netstat -lnp | grep 12345` 
+
+`kill -9 <pid>`
+
+where <pid> is the process id that the port is open on.
+
+To change the python version that the system is currently running on: 
+`sudo update-alternatives --config python` or `sudo update-alternatives --config python3`
+
+The python3.7 command for StreamAndFindPerson.py, testfile.py, PARROTML.py and takeoff.py should work as intended. Make sure to DEMO the Parrot Drone in an environment that is free of obstacles as the drone should have some space to maneuver when it first initializes. The UBC Health Sciences building is a prime location! Make sure to fix the motor of the drone before flying it again. Make sure to acquire a new case for the sensor (obstacle avoidance) module.
+
+
