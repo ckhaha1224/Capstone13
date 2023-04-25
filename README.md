@@ -20,17 +20,17 @@ Hardware in use:
 Upon receiving the package from Capstone Group 13, the client can jump to **Section 5** to perform a demo. It should be mentioned that as a result of a recent crash the front left-side leg of the drone broke and after capstone team 13 changed the broken leg the drone flies abnormally. The fix for this is to change the current rotor back to the old rotor. Instructions on how to do this are below in **Section 1 - Drone**.  The 3D printed arduino casing is cracked and both Pololu boards (normally containing 6 sensors each) are missing one sensor chip each. We recommend reprinting the 3D case (files provided) and replacing the sensors.  The rest of the sections are included for better understanding the system and to be able to reproduce the system if need be. Pay attention that upon each unsuccessful flight (CRASH), the drone needs to be re-calibrated for best performance (**Section 1 - Drone**). Additionally, the sensor reset button needs to be pushed once to reset the sensor if the connection to the drone is lost (**Section 3 - Arduino**). 
 
 ## Useful Links
-https://github.com/Ascend-Huawei/Obstacle_Avoidance_Stack
-https://github.com/Ascend-Huawei/HiFly_Drone/wiki/TP-Link-Wireless-Router-Setup
-https://github.com/Ascend-Huawei/gesture-controlled-drone
-https://www.hiascend.com/document/detail/en/CANNCommunityEdition/60RC1alphaX/softwareinstall/instg/atlasdeploy_03_0002.html
-https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html
-https://developer.parrot.com/docs/olympe/installation.html
-https://github.com/Parrot-Developers/olympe/blob/gsdk-1.0-branch/src/olympe/doc/installation.rst
-https://www.youtube.com/watch?v=cKK8-iR-ERs&t=70s&ab_channel=Parrot
-http://tplinkwifi.net/
-https://www.parrot.com/assets/s3fs-public/2021-09/anafi-user-guide.pdf
-https://www.amazon.com/Parrot-Foldable-Quadcopter-Autonomous-vertical/dp/B07D5R2JKL?th=1
+Model of obstacle avoidance mount: https://github.com/Ascend-Huawei/Obstacle_Avoidance_Stack
+Setting up the TP-Link Wifi: https://github.com/Ascend-Huawei/HiFly_Drone/wiki/TP-Link-Wireless-Router-Setup
+Last year's Capstone project: https://github.com/Ascend-Huawei/gesture-controlled-drone
+Install ATC on your environment: https://www.hiascend.com/document/detail/en/CANNCommunityEdition/60RC1alphaX/softwareinstall/instg/atlasdeploy_03_0002.html
+Set up Atlas 200 DK: https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html
+Install Olympe: https://developer.parrot.com/docs/olympe/installation.html
+Olympe Github: https://github.com/Parrot-Developers/olympe/blob/gsdk-1.0-branch/src/olympe/doc/installation.rst
+How to repair the Parrot Anafi drone: https://www.youtube.com/watch?v=cKK8-iR-ERs&t=70s&ab_channel=Parrot
+To configure the wifi module: http://tplinkwifi.net/
+Parrot Anafi user guide:https://www.parrot.com/assets/s3fs-public/2021-09/anafi-user-guide.pdf
+To buy a new Parrot Anafi drone: https://www.amazon.com/Parrot-Foldable-Quadcopter-Autonomous-vertical/dp/B07D5R2JKL?th=1
 
 
 ## Section 1 - Drone
