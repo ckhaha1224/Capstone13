@@ -21,15 +21,25 @@ Upon receiving the package from Capstone Group 13, the client can jump to **Sect
 
 ## Useful Links
 Model of obstacle avoidance mount: https://github.com/Ascend-Huawei/Obstacle_Avoidance_Stack
+
 Setting up the TP-Link Wifi: https://github.com/Ascend-Huawei/HiFly_Drone/wiki/TP-Link-Wireless-Router-Setup
+
 Last year's Capstone project: https://github.com/Ascend-Huawei/gesture-controlled-drone
+
 Install ATC on your environment: https://www.hiascend.com/document/detail/en/CANNCommunityEdition/60RC1alphaX/softwareinstall/instg/atlasdeploy_03_0002.html
+
 Set up Atlas 200 DK: https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html
+
 Install Olympe: https://developer.parrot.com/docs/olympe/installation.html
+
 Olympe Github: https://github.com/Parrot-Developers/olympe/blob/gsdk-1.0-branch/src/olympe/doc/installation.rst
+
 How to repair the Parrot Anafi drone: https://www.youtube.com/watch?v=cKK8-iR-ERs&t=70s&ab_channel=Parrot
+
 To configure the wifi module: http://tplinkwifi.net/
+
 Parrot Anafi user guide:https://www.parrot.com/assets/s3fs-public/2021-09/anafi-user-guide.pdf
+
 To buy a new Parrot Anafi drone: https://www.amazon.com/Parrot-Foldable-Quadcopter-Autonomous-vertical/dp/B07D5R2JKL?th=1
 
 
