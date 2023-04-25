@@ -3,8 +3,8 @@ import math
 class APF:
 
   # constants
-  K_ATTRACT = 0.01
-  K_REPEL = 100000.0
+  K_ATTRACT = 0.1
+  K_REPEL = 1000.0
   NUM_SENSORS = 7
   RADIUS_MAX = 500.0
   
@@ -20,7 +20,7 @@ class APF:
 
   
       # calculate attractive force
-      fx_attract = APF.K_ATTRACT * (dest_dist - 500)
+      fx_attract = APF.K_ATTRACT * (dest_dist)
       fy_attract = 0 # this will always be 0, because we are always facing the subject
   
       # calculate repulsive forces
@@ -28,10 +28,24 @@ class APF:
       fy_repels = [APF.repel_y(0, obs_x[i], 0, obs_y[i], distances[i]) for i in range(APF.NUM_SENSORS)]
   
       # calculate net force
+      fx_net = fx_attract
+      #fy_net = 0
+      #print("!DEBUG fx repels is ", fx_repels)
+      #print("!DEBUG fx attract is ", fx_attract)
       #fx_net = sum(fx_repels) + fx_attract
-      #fy_net = sum(fy_repels) + fy_attract
-      fx_net = sum(fx_repels)
+      #print("!DEBUG fy repels is ", fy_repels)
       fy_net = sum(fy_repels)
+
+      if(fx_net >= 0.3):
+        fx_net = 0.3
+      elif(fx_net <= -0.3):
+        fx_net = -0.3
+    
+      if(fy_net >= 0.3):
+        fy_net = 0.3
+      elif(fy_net <= -0.3):
+        fy_net = -0.3
+    
       return (fx_net, fy_net)
   
 
@@ -54,6 +68,14 @@ class APF:
           fx_repel = 0.5 * APF.K_REPEL * ((1.0 / distance) - (1.0 / APF.RADIUS_MAX)) * 0.5 *(1.0/distance) * (-2.0 * (xob )) / distance
       else:
           fx_repel = 0.0
+
+      if(fx_repel > 0.1):
+        fx_repel = 0.3
+      elif(fx_repel < -0.1):
+        fx_repel = -0.3
+      else:
+        fx_repel = 0.0
+         
       return fx_repel
   
   # helper function to calculate repulsive force in y-direction
@@ -64,4 +86,12 @@ class APF:
           fy_repel = 0.5 * APF.K_REPEL * ((1.0 / distance) - (1.0 / APF.RADIUS_MAX)) * 0.5 * (1.0/distance) * (-2.0 * (yob )) / distance
       else:
           fy_repel = 0.0
+
+      if(fy_repel > 0.1):
+        fy_repel = 0.3
+      elif(fy_repel < -0.1):
+        fy_repel = -0.3
+      else:
+        fy_repel = 0.0
+
       return fy_repel
