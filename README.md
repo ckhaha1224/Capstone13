@@ -92,19 +92,19 @@ Make sure in the python code that receives sensor data the UDP port is specified
 
 Sometimes although the sensors LEDs are flashing and changing, the sensor cannot be pinged. Simply press the reset button on the Arduino Nano and it will be pingable within seconds, if the above is done correctly. 
 
-*The case holding the sensor boards and arduino broke on the very last day of the project. Please make sure to design and 3D print a new case before attempting to run the code. *
+*The case holding the sensor boards and arduino broke on the very last day of the project. Please make sure to design and 3D print a new case before attempting to run the code.*
 
 ## Section 4 - Atlas Board:
 The board is running Linux 18.04 and most of the files for this project can be found under `cd code/gsdk3`. Packages are installed in various environments and due to the sheer number of the packages, they are not included in this README file. The bootable SD card that is currently running on the board contains all the packages that are necessary for running the project. The SD card of the board needs to be always in the board for the Atlas 200 DK board to function properly. To investigate the files inside the SD card, you need a computer running LINUX AND that computer needs to have a SD card reader. Windows computers require you to format the disk, which will cause everything to disappear, so don’t do that!
 
 ## Section 5 - Quickstart DEMO:
 1.	Make the following connections as shown in the picture.
-  1. Connect the Atlas 200 DK Board to power and connect the TP-Link Modem to the Atlas 200DK board using a network cable.
-  2. Connect the TP-Link modem to power.
-  3. Connect the USB_C cable from the Atlas board to your laptop. Then turn on the drone and the sensor module.
+  - Connect the Atlas 200 DK Board to power and connect the TP-Link Modem to the Atlas 200DK board using a network cable.
+  - Connect the TP-Link modem to power.
+  - Connect the USB_C cable from the Atlas board to your laptop. Then turn on the drone and the sensor module.
 ![image](https://user-images.githubusercontent.com/73012787/234382853-33189782-f774-4f6c-bef3-0adf8ebabce9.png)
 2. Set up the USB_C (RNDIS).
-  1. In device manager find USB RNDIS. This may be in “other devices”
+  - In device manager find USB RNDIS. This may be in “other devices”
   ![image](https://user-images.githubusercontent.com/73012787/234383035-7946e652-65f2-403d-bcf9-5fd976a6498c.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383159-a117f064-85d2-4bc8-a9b8-0c5841c1cac6.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383179-3d6105c6-322b-4b89-933c-e54d512232ad.png)
