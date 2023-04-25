@@ -113,16 +113,6 @@ class ParrotDrone(threading.Thread):
     
     
     def move_drone(self, fx, fy):
-    
-        #if(fx > 0.5):
-        #  fx = 0.5
-        #if(fx < -0.5):
-        #  fx = -0.5
-          
-        #if(fy > 0.5):
-        #  fy = 0.5
-        #if(fy < -0.5):
-        #  fy = -0.5
           
         if(fx > 0.1):
           fx = 0.5

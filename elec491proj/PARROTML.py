@@ -36,7 +36,6 @@ from olympe.arsdkng.pdraw import VideoFrame
 
 from utils.shared_variable import Shared
 import threading
-# from threading import Thread
 from utils.runlive import PresenterServer
 import openpose_tf
 
