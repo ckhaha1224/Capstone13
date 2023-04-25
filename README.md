@@ -31,7 +31,7 @@ Make sure to disconnect the drone from your phone before attempting to fly the d
 
 Finally pay a lot of attention when charging the drone, we have burned one once, and it cost a lot! Also, this drone is not commercially available anymore, so you have to resort to third party vendors!
 
-*One leg of the drone broke on the very last day of the project. Capstone Team PN-13 replaced the broken leg of the drone with the old drone’s corresponding leg. As a result the drone behaves abnormally even during a simple takeoff. The solution could be to change the motor that was mounted on the broken leg of the drone to what it was previously. Take the old rotor out of the broken leg and replace it with the rotor that is already mounted on the drone. The specific leg rotor is marked with two tape strips on the leg!  A video is attached in useful links that explains how the Anafi can be disassembled and reassembled.  Hopefully this will fix the drone, if not consult the parrot Anafi forum and ask for help online. *
+*One leg of the drone broke on the very last day of the project. Capstone Team PN-13 replaced the broken leg of the drone with the old drone’s corresponding leg. As a result the drone behaves abnormally even during a simple takeoff. The solution could be to change the motor that was mounted on the broken leg of the drone to what it was previously. Take the old rotor out of the broken leg and replace it with the rotor that is already mounted on the drone. The specific leg rotor is marked with two tape strips on the leg!  A video is attached in useful links that explains how the Anafi can be disassembled and reassembled.  Hopefully this will fix the drone, if not consult the parrot Anafi forum and ask for help online.*
 
 ## Section 2 – Wi-Fi Modem
 
@@ -43,7 +43,8 @@ To connect to the drone and the sensor the following files should be as displaye
 ![image](https://user-images.githubusercontent.com/73012787/234379795-9cd06f40-ad36-47a0-af3f-72502c799f77.png)
 2. `cd/etc` then `sudo resolv.conf`:
 ![image](https://user-images.githubusercontent.com/73012787/234379922-473e7605-2281-4d49-aa21-b0c6fe53b83c.png)
-**TPlink website: To connect a new drone to the TPLink Wifi or verify the drone and sensor information in the TPLink Modem: **
+
+**TPlink website: To connect a new drone to the TPLink Wifi or verify the drone and sensor information in the TPLink Modem:**
 
 Connect the TP Link while it is powered on to your computer's Ethernet port. Then navigate to www.tplinkwifi.net and put the username: `admin` and password: `admin`. if unsuccessful to see the username and password prompt do either one of Solution One or Solution Two in the TP-link website (**useful links**). To connect a new drone, do *Quick Setup* and follow the pre-set configurations. If you change the name of the TP-Link Wi-Fi from *TP-Link_A5A3_Parrot* to something else or if you change the TP-Link modem’s password from *90321702* to something else you have to change the code running on the Arduino Nano to be able to communicate with the sensor module. If you overlook this, you will never get any data from the sensor. Additionally, some ports are specified in the TP-Link GUI as below: 
 ![image](https://user-images.githubusercontent.com/73012787/234380355-925da5e0-2ca9-4226-b53b-c9f1aa755431.png)
@@ -51,19 +52,19 @@ The TP Link Quick Setup for 2.4 GHz network can recognize the Parrot Wi-Fi and y
 
 **Connect to the Internet:**
 1. To connect to the internet, you navigate to the `01-netcfg.yaml` file and change it to the following: 
-`Network: 
- version: 2
-  renderer: networkd
-  ethernets:
-    eth0:
-      dhcp4: yes
+  Network: 
+   version: 2
+    renderer: networkd
+    ethernets:
+      eth0:
+        dhcp4: yes
 
-    usb0:
-      dhcp4: no
-      addresses: [192.168.1.2/24]
-      gateway4: 192.168.1.223
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]`
+      usb0:
+        dhcp4: no
+        addresses: [192.168.1.2/24]
+        gateway4: 192.168.1.223
+        nameservers:
+          addresses: [8.8.8.8, 8.8.4.4]
 2. Then after you saved the new `01-netcfg.yaml` file you must do `sudo netplan config`
 3. Afterwards turn EVERYTHING off and turn everything on again. Wait for the RNDIS port to show up on *View Network Connections*
 4. Right-click on the current Wi-Fi connection and select *Properties*. Then in the *Sharing* tab, disable the option *Allow other network users to connect through this computer's...*. Then press ok, Exit and do the same thing but enable the option *Allow other network users to connect through this computer's...*. Then, from the dropdown menu, choose the Ethernet connection that you assigned to the USB-C port, coming from the Atlas 200DK board.
