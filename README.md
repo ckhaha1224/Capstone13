@@ -79,19 +79,19 @@ The TP Link Quick Setup for 2.4 GHz network can recognize the Parrot Wi-Fi and y
 **Connect to the Internet:**
 1. To connect to the internet, you navigate to the `01-netcfg.yaml` file and change it to the following: 
 
-      Network: 
-       version: 2
-        renderer: networkd
-        ethernets:
-          eth0:
-            dhcp4: yes
+        Network: 
+         version: 2
+          renderer: networkd
+          ethernets:
+            eth0:
+              dhcp4: yes
 
-          usb0:
-            dhcp4: no
-            addresses: [192.168.1.2/24]
-            gateway4: 192.168.1.223
-            nameservers:
-              addresses: [8.8.8.8, 8.8.4.4]
+            usb0:
+              dhcp4: no
+              addresses: [192.168.1.2/24]
+              gateway4: 192.168.1.223
+              nameservers:
+                addresses: [8.8.8.8, 8.8.4.4]
 2. Then after you saved the new `01-netcfg.yaml` file you must do `sudo netplan config`
 3. Afterwards turn EVERYTHING off and turn everything on again. Wait for the RNDIS port to show up on *View Network Connections*
 4. Right-click on the current Wi-Fi connection and select *Properties*. Then in the *Sharing* tab, disable the option *Allow other network users to connect through this computer's...*. Then press ok, Exit and do the same thing but enable the option *Allow other network users to connect through this computer's...*. Then, from the dropdown menu, choose the Ethernet connection that you assigned to the USB-C port, coming from the Atlas 200DK board.
@@ -150,15 +150,15 @@ The board is running Linux 18.04 and most of the files for this project can be f
 9. Make sure the sensor is on and ping the Sensor: `ping 192.168.0.152` (if not pingable see **Section 3 - Sensor** and **Section 2 - Wi-Fi Modem**).
 10.	If successfully ping both, then run the following commands exactly as specified:
 
-      cd code/gsdk3/products/olympe/linux/env
-      source setenv (ignore the error, not finding the library)
-      cd
-      cd /usr/share/zoneinfo
-      sudo chmod +rwx UCT
-      cd
-      cd code/gsdk3/packages/olympe/src/olympe/doc/examples
-      source ~/.bashrc
-      export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1
+        cd code/gsdk3/products/olympe/linux/env
+        source setenv (ignore the error, not finding the library)
+        cd
+        cd /usr/share/zoneinfo
+        sudo chmod +rwx UCT
+        cd
+        cd code/gsdk3/packages/olympe/src/olympe/doc/examples
+        source ~/.bashrc
+        export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1
     
 11. Run the following commands exactly as specified: `python3.7 StreamAndFindPerson.py`
 
