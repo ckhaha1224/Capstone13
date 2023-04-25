@@ -64,18 +64,21 @@ Two files are responsible for the wifi connection. At the moment, they are speci
 To connect to the drone and the sensor the following files should be as displayed: 
 
 1. `cd /etc/netplan` then `sudo vi 01-netcfg.yaml`: insert and change as specified (you need to know how to use Vi or you can just edit and save using the text editor)
+
 ![image](https://user-images.githubusercontent.com/73012787/234379795-9cd06f40-ad36-47a0-af3f-72502c799f77.png)
 2. `cd/etc` then `sudo resolv.conf`:
+
 ![image](https://user-images.githubusercontent.com/73012787/234379922-473e7605-2281-4d49-aa21-b0c6fe53b83c.png)
 
 **TPlink website: To connect a new drone to the TPLink Wifi or verify the drone and sensor information in the TPLink Modem:**
 
-Connect the TP Link while it is powered on to your computer's Ethernet port. Then navigate to www.tplinkwifi.net and put the username: `admin` and password: `admin`. if unsuccessful to see the username and password prompt do either one of Solution One or Solution Two in the TP-link website (**useful links**). To connect a new drone, do *Quick Setup* and follow the pre-set configurations. If you change the name of the TP-Link Wi-Fi from *TP-Link_A5A3_Parrot* to something else or if you change the TP-Link modem’s password from *90321702* to something else you have to change the code running on the Arduino Nano to be able to communicate with the sensor module. If you overlook this, you will never get any data from the sensor. Additionally, some ports are specified in the TP-Link GUI as below: 
+Connect the TP Link while it is powered on to your computer's Ethernet port. Then navigate to www.tplinkwifi.net and put the username: `admin` and password: `admin`. if unsuccessful to see the username and password prompt do either one of Solution One or Solution Two in the TP-link website (**Useful Links**). To connect a new drone, do *Quick Setup* and follow the pre-set configurations. If you change the name of the TP-Link Wi-Fi from *TP-Link_A5A3_Parrot* to something else or if you change the TP-Link modem’s password from *90321702* to something else you have to change the code running on the Arduino Nano to be able to communicate with the sensor module. If you overlook this, you will never get any data from the sensor. Additionally, some ports are specified in the TP-Link GUI as below: 
 ![image](https://user-images.githubusercontent.com/73012787/234380355-925da5e0-2ca9-4226-b53b-c9f1aa755431.png)
 The TP Link Quick Setup for 2.4 GHz network can recognize the Parrot Wi-Fi and you only need to type in the Drone's Wi-Fi password to setup the drone. This has already been done! If you switch the side button of the TP-Link Wi-Fi modem all of these settings would reset so make sure to avoid touching it (it has already been taped to Hotspot Mode!)
 
 **Connect to the Internet:**
 1. To connect to the internet, you navigate to the `01-netcfg.yaml` file and change it to the following: 
+
     Network: 
      version: 2
       renderer: networkd
@@ -137,14 +140,16 @@ The board is running Linux 18.04 and most of the files for this project can be f
   ![image](https://user-images.githubusercontent.com/73012787/234383201-96a8229c-5248-41c5-8594-451f244391ac.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383215-817a9954-5120-4c55-b95b-d425c97b51b1.png)
   ![image](https://user-images.githubusercontent.com/73012787/234383292-efe5315b-c0cf-4cf6-ba10-9c8fa161d452.png)
+  
 3. Go to *View Network Connections* on your PC and right-click on the current Wi-Fi connection and select *Properties*. Then in the *Sharing* tab, check the option *Allow other network users to connect through this computer's...*. Then, from the dropdown menu, choose the Ethernet connection that you assigned to the USB-C port, coming from the Atlas 200DK board.
 4. Now, navigate back to *View Network Connections*, right-click on the Ethernet connection that is RNDIS (coming from the Atlas 200 DK Board). Then, go to *Properties* and click on TCP/IPv4 connection in the dropdown menu. Choose *Use the following IP address:* and specify the IP address as `192.168.1.223` and the subnet mask to `255.255.255.0`, then press OK and then make sure everything in view network connection is as specified above. Double-check for sure!!!
-5.	Install MobaXterm for additional convenience while SSH-ing into the board.
-6.	In MobaXterm, create an SSH terminal by clicking on *Session - SSH*, then Remote host is `192.168.1.2` and specify the username as `HwHiAiUser`. If there is a VPN running on your computer (e.g. UBC VPN, …) the Atlas Board will not be able to connect through SSH. 
-7.	If everything has been done correctly, you should be prompted with a message asking for the password: `Mind@123`. Ignore the message about saving the password. If you do the above correctly, you will only need to start from this step when demoing the project.
-8.	Make sure the drone is on and ping the Drone: `ping 192.168.42.1` (if not pingable see **Section 1 - Drone** and **Section 2 - Wi-Fi Modem**).
-9.	Make sure the sensor is on and ping the Sensor: `ping 192.168.0.152` (if not pingable see **Section 3 - Sensor** and **Section 2 - Wi-Fi Modem**).
+5. Install MobaXterm for additional convenience while SSH-ing into the board.
+6. In MobaXterm, create an SSH terminal by clicking on *Session - SSH*, then Remote host is `192.168.1.2` and specify the username as `HwHiAiUser`. If there is a VPN running on your computer (e.g. UBC VPN, …) the Atlas Board will not be able to connect through SSH. 
+7. If everything has been done correctly, you should be prompted with a message asking for the password: `Mind@123`. Ignore the message about saving the password. If you do the above correctly, you will only need to start from this step when demoing the project.
+8. Make sure the drone is on and ping the Drone: `ping 192.168.42.1` (if not pingable see **Section 1 - Drone** and **Section 2 - Wi-Fi Modem**).
+9. Make sure the sensor is on and ping the Sensor: `ping 192.168.0.152` (if not pingable see **Section 3 - Sensor** and **Section 2 - Wi-Fi Modem**).
 10.	If successfully ping both, then run the following commands exactly as specified:
+
     cd code/gsdk3/products/olympe/linux/env
     source setenv (ignore the error, not finding the library)
     cd
@@ -154,6 +159,7 @@ The board is running Linux 18.04 and most of the files for this project can be f
     cd code/gsdk3/packages/olympe/src/olympe/doc/examples
     source ~/.bashrc
     export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1
+    
 11. Run the following commands exactly as specified: `python3.7 StreamAndFindPerson.py`
 
 ## Section 6 - Additional Debugging
