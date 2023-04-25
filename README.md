@@ -19,6 +19,20 @@ Hardware in use:
 
 Upon receiving the package from Capstone Group 13, the client can jump to **Section 5** to perform a demo. It should be mentioned that as a result of a recent crash the front left-side leg of the drone broke and after capstone team 13 changed the broken leg the drone flies abnormally. The fix for this is to change the current rotor back to the old rotor. Instructions on how to do this are below in **Section 1 - Drone**.  The 3D printed arduino casing is cracked and both Pololu boards (normally containing 6 sensors each) are missing one sensor chip each. We recommend reprinting the 3D case (files provided) and replacing the sensors.  The rest of the sections are included for better understanding the system and to be able to reproduce the system if need be. Pay attention that upon each unsuccessful flight (CRASH), the drone needs to be re-calibrated for best performance (**Section 1 - Drone**). Additionally, the sensor reset button needs to be pushed once to reset the sensor if the connection to the drone is lost (**Section 3 - Arduino**). 
 
+## Useful Links
+https://github.com/Ascend-Huawei/Obstacle_Avoidance_Stack
+https://github.com/Ascend-Huawei/HiFly_Drone/wiki/TP-Link-Wireless-Router-Setup
+https://github.com/Ascend-Huawei/gesture-controlled-drone
+https://www.hiascend.com/document/detail/en/CANNCommunityEdition/60RC1alphaX/softwareinstall/instg/atlasdeploy_03_0002.html
+https://www.hiascend.com/document/detail/en/Atlas200DKDeveloperKit/1013/environment/atlased_04_0001.html
+https://developer.parrot.com/docs/olympe/installation.html
+https://github.com/Parrot-Developers/olympe/blob/gsdk-1.0-branch/src/olympe/doc/installation.rst
+https://www.youtube.com/watch?v=cKK8-iR-ERs&t=70s&ab_channel=Parrot
+http://tplinkwifi.net/
+https://www.parrot.com/assets/s3fs-public/2021-09/anafi-user-guide.pdf
+https://www.amazon.com/Parrot-Foldable-Quadcopter-Autonomous-vertical/dp/B07D5R2JKL?th=1
+
+
 ## Section 1 - Drone
 
 After each crash, the drone needs to be recalibrated. Download the FreeFlight6 App from the Apple AppStore and connect to the drone with your phone to see many of the settings that can be controlled through the App. The App can be used to calibrate the drone and the camera as necessary. The specific pre-sets of the drone, such as maximum height and tilt, can also be adjusted as specified in the app. Videos can be viewed from the drone and can also be downloaded to the phone.
@@ -134,6 +148,7 @@ The board is running Linux 18.04 and most of the files for this project can be f
 
 ## Section 6 - Additional Debugging
 Sometimes if you do not close the UDP port that communicates with the sensor properly, you will get missing events error which can be solved with this code: 
+
 `netstat -lnp | grep 12345` 
 
 `kill -9 <pid>`
@@ -145,4 +160,19 @@ To change the python version that the system is currently running on:
 
 The python3.7 command for StreamAndFindPerson.py, testfile.py, PARROTML.py and takeoff.py should work as intended. Make sure to DEMO the Parrot Drone in an environment that is free of obstacles as the drone should have some space to maneuver when it first initializes. The UBC Health Sciences building is a prime location! Make sure to fix the motor of the drone before flying it again. Make sure to acquire a new case for the sensor (obstacle avoidance) module.
 
+**Description of python code:**
+-	ParrotDrone.py: Miscellaneous code for drone connection, etc. 
+-	StreamAndFindPerson.py: Command the drone based on both ML model and the sensor readings
+-	artificial_potential_field.py: Contains the artificial potential field algorithm 
+-	testfile.py: Command the drone based on the sensor readings, do “python3.7 testfile.py” to run the stand alone sensor-command code 
+-	takeoff.py: Sample code to take off and land the drone to see the stability of drone 
+-	PARROTML.py: Code example for running the standalone ML model – Third Version
 
+## Section 7 - Future Work
+It is advised for a Linux expert to be part of this project so that all the Linux debugging is done faster and more efficiently, without damaging the rest of the environments. Make sure to read through all of the useful links as all the information here comes from these websites and if there is anything missing, there is a high chance that it could be found in one of the provided links! 
+  
+For starters, the future capstone project can get the presenter server running. Presenter server allows tracking to be viewed from the PC GUI (MobaXTerm). This will require additional packages and will require the Atlas board to be connected to the internet to download and install the packages. 
+  
+Fixing the internet connection so that the drone simultaneously connects to the board while the internet is active is another goal for the future capstone group. 
+  
+The Parrot Drone also responds slowly to movements and more modification needs to be done to make it more responsive. 
