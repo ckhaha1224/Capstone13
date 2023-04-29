@@ -150,8 +150,6 @@ The board is running Linux 18.04 and most of the files for this project can be f
 9. Make sure the sensor is on and ping the Sensor: `ping 192.168.0.152` (if not pingable see **Section 3 - Sensor** and **Section 2 - Wi-Fi Modem**).
 10.	If successfully ping both, then run the following commands exactly as specified:
 
-        cd code/gsdk3/products/olympe/linux/env
-        source setenv (ignore the error, not finding the library)
         cd
         cd /usr/share/zoneinfo
         sudo chmod +rwx UCT
