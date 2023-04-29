@@ -1,0 +1,68 @@
+#!/bin/bash
+# This script automatically sets PYTHONPATH env variable so python programs
+# belonging to the present workspace can be executed with no effort.
+#
+# Usage:
+# source setenv
+
+[[ $0 != $BASH_SOURCE ]] && SCRIPT_PATH=$(realpath $BASH_SOURCE) || SCRIPT_PATH="`readlink -f "$0"`"
+
+ENV_DIR="`dirname "$SCRIPT_PATH"`"
+COMMON_DIR="`dirname "$ENV_DIR"`"
+ARSDK_DIR="`dirname "$COMMON_DIR"`"
+PRODUCT_DIR="`dirname "$ARSDK_DIR"`"
+ROOT_DIR="`dirname "$PRODUCT_DIR"`"
+MODULES_DIR="${ROOT_DIR}/packages"
+PYTHON_ENV_DIR="${OLYMPE_PYTHON_ENV_DIR:-${ROOT_DIR}/.python/}/py3"
+
+# disable the default virtualenv prompt change
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# load python virtualenv
+. ${PYTHON_ENV_DIR}/bin/activate
+export PATH="${PYTHON_ENV_DIR}/bin:${PATH}"
+
+MODULES=olympe
+PYTHONPATH=""
+
+for m in ${MODULES}; do
+  if [ ! -z "${PYTHONPATH}" ];then
+    PYTHONPATH="${PYTHONPATH}:${MODULES_DIR}/${m}/src"
+  else
+    PYTHONPATH="${MODULES_DIR}/${m}/src"
+  fi
+done
+
+
+# Add alchemy "final" and staging-host folders to the python path
+# arsdkgen needs to be executed from staging-host according to arsdk-xml/atom.mk
+PYTHONPATH="${PYTHONPATH}:${ROOT_DIR}/out/olympe-linux/final/usr/lib/python"
+PYTHONPATH="${PYTHONPATH}:${ROOT_DIR}/out/olympe-linux/final/usr/lib/python/site-packages"
+PYTHONPATH="${PYTHONPATH}:${ROOT_DIR}/out/olympe-linux/final/usr/local/lib/python"
+PYTHONPATH="${PYTHONPATH}:${ROOT_DIR}/out/olympe-linux/final/usr/local/lib/python/site-packages"
+PYTHONPATH="${PYTHONPATH}:${ROOT_DIR}/out/olympe-linux/staging-host/usr/lib/arsdkgen"
+
+export PYTHONPATH
+
+# tell Olympe where to retrieve the arsdk libraries
+OLYMPE_LIB_PATH="${ROOT_DIR}/out/olympe-linux/final/usr/lib"
+# tell Olympe where find the xml file
+OLYMPE_XML="${ROOT_DIR}/out/olympe-linux/staging-host/usr/lib/arsdkgen/xml"
+# tell Olympe where to generate file
+OLYMPE_GENERATE="${ROOT_DIR}/packages/olympe/src/olympe/"
+
+# set LD_LIBRARY_PATH
+. ${ROOT_DIR}/out/olympe-linux/final/native-wrapper.sh
+
+# create handy aliases to run principle tools
+alias olympe="python -um olympe.app"
+
+export OLYMPE_LIB_PATH
+export OLYMPE_XML
+export OLYMPE_GENERATE
+
+if [ $# -ne 0 ]; then
+  $@
+fi
+export PYTHONPATH=$PYTHONPATH:~/code/gsdk3/out/olympe-linux/final/usr/lib/python/site-packages/
+export PYTHONPATH=$PYTHONPATH:~/code/gsdk3/out/olympe-linux/final/usr/lib/python/site-packages/

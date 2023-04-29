@@ -1,0 +1,33 @@
+{
+    "release": {
+        "additional_files": [
+            {
+                "src": "gradle/gsdk/distrib/gsdk.tar.gz",
+                "dest": "groundsdk-${PARROT_BUILD_VERSION_AS_RELEASE}.tar.gz",
+                "mandatory": true
+            },
+            {
+                "src": "gradle/groundsdkdemo/distrib/groundsdkdemo.tar.gz",
+                "mandatory": true
+            },
+            {
+                "src": "gradle/groundsdkdemo/outputs/apk/debug/groundsdkdemo-debug.apk",
+                "dest": "images/groundsdkdemo-debug.apk",
+                "mandatory": true
+            }
+        ]
+    },
+
+    "publish": {
+        "application": {
+            "type": "android",
+            "name": "GroundSDK Demo",
+            "inhouse": [
+                {
+                    "flavor": null,
+                    "image": "groundsdkdemo-debug.apk"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,80 @@
+#!/bin/bash
+# This script install olympe dependencies
+#
+# Usage:
+# bash postinst
+
+set -e
+
+SCRIPT_PATH="`readlink -f "$0"`"
+ENV_DIR="`dirname "$SCRIPT_PATH"`"
+COMMON_DIR="`dirname "$ENV_DIR"`"
+ARSDK_DIR="`dirname "$COMMON_DIR"`"
+PRODUCT_DIR="`dirname "$ARSDK_DIR"`"
+ROOT_DIR="`dirname "$PRODUCT_DIR"`"
+MODULES_DIR="${ROOT_DIR}/packages"
+PYTHON_ENV_DIR="${OLYMPE_PYTHON_ENV_DIR:-${ROOT_DIR}/.python}"
+
+# Check if we need to sudo things
+if [ "$(id -u)" != "0" ]
+then
+  SUDO="sudo"
+  echo "This script might prompt you for your sudo password."
+else
+  SUDO=""
+fi
+
+# Install system packages with apt
+${SUDO} apt-get update || true # who doesn't have invalid/broken apt sources
+
+# Install python
+${SUDO} apt-get -y install python3 python3-dev python3-pip wget
+
+# olympe-deps build dependencies
+CLANG_VERSION=6.0
+${SUDO} /usr/bin/python3 -m pip install clang~=${CLANG_VERSION}
+${SUDO} apt-get -y install libclang-${CLANG_VERSION}-dev
+
+# pdraw dependencies
+${SUDO} apt-get -y install build-essential yasm cmake libtool libc6 libc6-dev \
+  unzip freeglut3-dev libglfw3 libglfw3-dev libsdl2-dev libjson-c-dev \
+  libcurl4-gnutls-dev libavahi-client-dev libgles2-mesa-dev
+
+# ffmpeg build dependencies
+${SUDO} apt-get -y install rsync
+
+# arsdk build dependencies
+${SUDO} apt-get -y install cmake libbluetooth-dev libavahi-client-dev \
+    libopencv-dev libswscale-dev libavformat-dev \
+    libavcodec-dev libavutil-dev cython python-dev
+
+# Bootstrap a python environment
+# First, we need a temporary valid python environment for pip/virtualenv
+PYTHON=/usr/bin/python3
+BOOTSTRAP_DIR=/tmp/olympe/bootstrap
+PYTHON_TMPENV_DIR="${BOOTSTRAP_DIR}/tmppython"
+GET_PIP="${BOOTSTRAP_DIR}/get-pip.py"
+rm -rf "${BOOTSTRAP_DIR}"
+mkdir -p ${BOOTSTRAP_DIR}
+wget https://bootstrap.pypa.io/get-pip.py -O "${GET_PIP}"
+
+# Python 3 tmp env
+mkdir -p "${PYTHON_TMPENV_DIR}/bin"
+cp ${PYTHON} ${PYTHON_TMPENV_DIR}/bin
+PYTHON=${PYTHON_TMPENV_DIR}/bin/python3
+env -i PATH=/usr/bin:/bin ${PYTHON} -EsS "${GET_PIP}" --prefix "${PYTHON_TMPENV_DIR}" --no-warn-script-location virtualenv --ignore-installed
+
+# Now that we have this new python env, create our definitive virtualenvs
+PYTHONUSERBASE="${PYTHON_TMPENV_DIR}" ${PYTHON} -m virtualenv --copies -p ${PYTHON} ${PYTHON_ENV_DIR}/py3
+PYTHON=/usr/bin/python3
+rm -rf "${BOOTSTRAP_DIR}"
+
+PY_REQS_TXT=$(find "${MODULES_DIR}/" -maxdepth 3 -mindepth 1 -name requirements.txt)
+
+# Perform a clean pip installation of all dependencies:
+#  - use ignore-installed to force the installation of a package even if it is
+#    present outside the virtual env
+#  - prior to this brutal installation, uninstall every dependencies so that
+#    files that belong to a previous version of a dependency are removed
+${ENV_DIR}/setenv pip uninstall --yes $(echo "$PY_REQS_TXT"|xargs -d '\n' -I{} echo -r {})
+${ENV_DIR}/setenv pip install --ignore-installed $(echo "$PY_REQS_TXT"|xargs -d '\n' -I{} echo -r {})

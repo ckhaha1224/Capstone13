@@ -1,0 +1,178 @@
+import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.BasePlugin
+import com.android.build.gradle.LibraryPlugin
+import org.gradle.internal.jvm.Jvm
+
+buildscript {
+    allprojects {
+        ext {
+            androidGradleVersion = '4.1.3'
+            jacocoVersion = '0.8.6'
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        google()
+        jcenter() {
+            // jcenter is scheduled for shutdown on May, 2021.
+            // All dependencies have to be found elsewhere by that time.
+            // List exhaustively all dependencies that still can only be found on
+            // jcenter. To be maintained regularly.
+            content {
+                includeModule('org.jetbrains.trove4j', 'trove4j')
+            }
+        }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${androidGradleVersion}"
+        classpath "org.jacoco:org.jacoco.core:${jacocoVersion}"
+    }
+}
+
+allprojects {
+    ext {
+        // product name: must be the name of a product definition directory in product
+        product = 'groundsdk'
+        // groundsdk product version
+        versionCode = (findProperty('appVersionCode') ?: 1) as int
+        versionName = findProperty('appVersionName') ?: '0.0.0'
+        versionNameSuffix = findProperty('appVersionNameSuffix')
+        // workspace root directory
+        root_dir = gradle.ext.root_dir
+        // put all build files into workspace out
+        root_build_dir = "${findProperty('alchemyOutRoot') ?: "${root_dir}/out"}/${ext.product}-android/gradle/"
+        // address sanitizer directories
+        asan_libs = "${root_build_dir}/../asan/libs"
+        asan_scripts = "${root_build_dir}/../asan/scripts"
+        // arsdk commands xml
+        arsdkxmldir = "${root_dir}/packages/common/arsdk-xml/"
+        // common configurations
+        minSdkVersion = 24
+        targetSdkVersion = 29
+        compileSdkVersion = 29
+
+        // Java version
+        javaVersion = JavaVersion.VERSION_1_8
+
+        // Android support libraries
+        androidXLocalBroadcastManager = 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+        androidXAnnotations = 'androidx.annotation:annotation:1.1.0'
+        // Google Play Services
+        googlePlayServicesLocation = 'com.google.android.gms:play-services-location:17.0.0'
+        // Retrofit
+        retrofit = 'com.squareup.retrofit2:retrofit:2.9.0'
+        retrofitGsonConverter = 'com.squareup.retrofit2:converter-gson:2.9.0'
+        retrofitScalarsConverter = 'com.squareup.retrofit2:converter-scalars:2.9.0'
+        retrofitLoggingInterceptor = 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+        gson = 'com.google.code.gson:gson:2.8.6'
+        // test dependencies
+        androidXTestRunner = 'androidx.test:runner:1.3.0'
+        androidXTestCore = 'androidx.test:core:1.3.0'
+        hamcrest = 'org.hamcrest:hamcrest:2.2'
+        mockito = 'org.mockito:mockito-android:3.8.0'
+    }
+
+    repositories {
+        mavenCentral()
+        google()
+        jcenter() {
+          // jcenter is scheduled for shutdown on May, 2021.
+            // All dependencies have to be found elsewhere by that time.
+            // List exhaustively all dependencies that still can only be found on
+            // jcenter. To be maintained regularly.
+            content {
+                includeModule('org.jetbrains.trove4j', 'trove4j')
+            }
+        }
+    }
+
+    group "com.parrot.drone.${product}"
+    version versionName
+    buildDir "${root_build_dir}/${project.name}"
+}
+
+// enable test coverage only if full tests ('connectedCheck') are required from command line
+def coverage = gradle.startParameter.taskNames.contains('connectedCheck')
+
+subprojects { project ->
+
+    afterEvaluate {
+        plugins.matching { it instanceof BasePlugin}.any { plugin ->
+
+            android {
+                compileSdkVersion = project.compileSdkVersion
+
+                defaultConfig {
+                    minSdkVersion minSdkVersion?.apiLevel ?: project.minSdkVersion
+                    targetSdkVersion project.targetSdkVersion
+                    versionCode project.versionCode
+                    versionName project.versionName
+                }
+
+                buildTypes {
+
+                    release {
+                        minifyEnabled false
+                        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                    }
+
+                    debug {
+                        versionNameSuffix project.versionNameSuffix
+                        testCoverageEnabled coverage && android.defaultConfig.testInstrumentationRunner != null
+                    }
+                }
+
+                compileOptions {
+                    sourceCompatibility javaVersion
+                    targetCompatibility javaVersion
+                }
+            }
+        }
+    }
+}
+
+project('groundsdk') {
+    afterEvaluate {
+        // NOTE : As of AGP 4.1.0, VERSION_NAME is not relevant anymore for libraries and thus is
+        //        not automatically injected in BuildConfig by the plugin anymore.
+        //        We emulate the former behavior here.
+        android.buildTypes {
+            debug.buildConfigField 'String', 'VERSION_NAME', "\"${versionName}${versionNameSuffix}\""
+            release.buildConfigField 'String', 'VERSION_NAME', "\"${versionName}\""
+        }
+    }
+}
+
+// apply private configuration
+file("${gradle.ext.root_dir}/products/groundsdk/private/android/build.gradle").with {
+    if (it.exists()) {
+        apply from: it
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+// Task to build common and jni using alchemy
+task('buildJni', type: Exec) {
+    File propertyFile = rootProject.file('local.properties')
+    if (propertyFile.exists()) {
+        Properties properties = new Properties()
+        properties.load(rootProject.file('local.properties').newDataInputStream())
+        environment ANDROID_NDK_PATH: properties.getProperty('ndk.dir')
+        environment ANDROID_SDK_PATH: properties.getProperty('sdk.dir')
+    } else {
+        environment ANDROID_NDK_PATH: "$System.env.ANDROID_NDK_PATH"
+        environment ANDROID_SDK_PATH: "$System.env.ANDROID_SDK_PATH"
+    }
+    group = "build external"
+    workingDir gradle.ext.root_dir
+    // ensure brew path is set
+    if (org.gradle.internal.os.OperatingSystem.current().macOsX && !environment.PATH.contains('/usr/local/bin')) {
+        environment PATH: "/usr/local/bin:${environment.PATH}"
+    }
+    commandLine = ['./build.sh', '--no-color', '-p', 'groundsdk-android', '-t', 'build-jni', '-j', '8']
+}
